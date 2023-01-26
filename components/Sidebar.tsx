@@ -6,7 +6,7 @@ import logo from 'public/logo.png';
 
 export function Sidebar() {
   return (
-    <div className="w-24 min-w-24">
+    <div className="w-24 min-w-24 shrink-0">
       <nav className="fixed top-0 bottom-0 w-24 bg-white flex flex-col justify-between items-center py-12">
         <div className="flex flex-col gap-12 items-center">
           <Link href="/">

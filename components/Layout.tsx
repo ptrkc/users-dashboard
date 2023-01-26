@@ -13,7 +13,7 @@ export function Layout({ children }: PropsWithChildren) {
   return (
     <div className={cn(poppins.variable, 'font-sans flex')}>
       <Sidebar />
-      <div>{children}</div>
+      <div className="w-full">{children}</div>
     </div>
   );
 }
