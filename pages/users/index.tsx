@@ -55,7 +55,7 @@ export default function UsersPage() {
       <h1 className="text-2xl font-bold text-[#1E1F20] text-shadow">
         Our Users
       </h1>
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col-reverse sm:flex-row justify-between items-center gap-4">
         <SearchInput value={searchInput} setValue={setSearchInput} />
         <AddUserButton />
       </div>
