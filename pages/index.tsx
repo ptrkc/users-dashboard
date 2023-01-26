@@ -1,12 +1,5 @@
-import Head from 'next/head';
+import PageContainer from '@/components/PageContainer';
 
 export default function HomePage() {
-  return (
-    <>
-      <Head>
-        <title>Home</title>
-      </Head>
-      <main>Home</main>
-    </>
-  );
+  return <PageContainer title="Home">Home</PageContainer>;
 }

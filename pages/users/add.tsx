@@ -1,12 +1,5 @@
-import Head from 'next/head';
+import PageContainer from '@/components/PageContainer';
 
 export default function AddUserPage() {
-  return (
-    <>
-      <Head>
-        <title>Add User</title>
-      </Head>
-      <main>Add User</main>
-    </>
-  );
+  return <PageContainer title="Add User">Add User</PageContainer>;
 }

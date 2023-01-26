@@ -1,12 +1,5 @@
-import Head from 'next/head';
+import PageContainer from '@/components/PageContainer';
 
 export default function SettingsPage() {
-  return (
-    <>
-      <Head>
-        <title>Settings</title>
-      </Head>
-      <main>Settings</main>
-    </>
-  );
+  return <PageContainer title="Settings">Settings</PageContainer>;
 }

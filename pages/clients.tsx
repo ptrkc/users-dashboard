@@ -1,12 +1,5 @@
-import Head from 'next/head';
+import PageContainer from '@/components/PageContainer';
 
 export default function ClientsPage() {
-  return (
-    <>
-      <Head>
-        <title>Clients</title>
-      </Head>
-      <main>Clients</main>
-    </>
-  );
+  return <PageContainer title="Clients">Clients</PageContainer>;
 }
