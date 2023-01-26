@@ -70,7 +70,7 @@ export default function EditUserPage() {
 
   return (
     <PageContainer
-      title="Add User"
+      title="Edit User"
       className="pl-4 pt-4 pr-0 pb-0 flex flex-col gap-4 h-full"
     >
       <div className="bg-white rounded-l-lg p-8 shadow-soft">
