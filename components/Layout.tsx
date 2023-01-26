@@ -11,9 +11,9 @@ const poppins = Poppins({
 
 export function Layout({ children }: PropsWithChildren) {
   return (
-    <div className={cn(poppins.variable, 'font-sans flex')}>
+    <div className={cn(poppins.variable, 'font-sans flex absolute inset-0')}>
       <Sidebar />
-      <div className="w-full">{children}</div>
+      <div className="w-full overflow-auto">{children}</div>
     </div>
   );
 }
