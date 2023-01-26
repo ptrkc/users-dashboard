@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRightIcon } from './Icons';
+import { ArrowRightIcon } from '@/components/Icons';
 
 interface User {
   id: string;

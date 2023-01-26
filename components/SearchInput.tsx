@@ -1,5 +1,5 @@
-import { ChangeEvent, ChangeEventHandler } from 'react';
-import { MagnifyingIcon, XIcon } from './Icons';
+import { ChangeEventHandler } from 'react';
+import { MagnifyingIcon, XIcon } from '@/components/Icons';
 
 export function SearchInput({
   value,

@@ -1,7 +1,7 @@
-import { cn } from '@/utils/classnames';
-import { Poppins } from '@next/font/google';
 import { PropsWithChildren } from 'react';
-import { Sidebar } from './Sidebar';
+import { Poppins } from '@next/font/google';
+import { Sidebar } from '@/components/Sidebar';
+import { cn } from '@/utils/classnames';
 
 const poppins = Poppins({
   subsets: ['latin'],

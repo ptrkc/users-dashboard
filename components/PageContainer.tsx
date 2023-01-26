@@ -1,8 +1,8 @@
-import { cn } from '@/utils/classnames';
-import Head from 'next/head';
 import { PropsWithChildren } from 'react';
+import Head from 'next/head';
+import { cn } from '@/utils/classnames';
 
-export default function PageContainer({
+export function PageContainer({
   className,
   children,
   title,

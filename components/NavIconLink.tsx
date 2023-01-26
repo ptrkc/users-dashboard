@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import { cn } from '@/utils/classnames';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { cn } from '@/utils/classnames';
 
 export function NavIconLink({ href, icon }: { href: string; icon: ReactNode }) {
   const router = useRouter();

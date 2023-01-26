@@ -31,7 +31,7 @@ export function PlusIcon() {
     <svg
       stroke="currentColor"
       fill="currentColor"
-      strokeWidth=".1"
+      strokeWidth="1"
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
     >

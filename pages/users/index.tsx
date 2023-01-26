@@ -1,8 +1,9 @@
-import PageContainer from '@/components/PageContainer';
+import { useMemo, useState } from 'react';
+import { AddUserButton } from '@/components/AddUserButton';
+import { PageContainer } from '@/components/PageContainer';
 import { SearchInput } from '@/components/SearchInput';
 import { UserCard } from '@/components/UserCard';
 import { useDebounceValue } from '@/hooks/useDebounceValue';
-import { useMemo, useState } from 'react';
 
 const users = [
   {
@@ -56,7 +57,7 @@ export default function UsersPage() {
       </h1>
       <div className="flex justify-between items-center">
         <SearchInput value={searchInput} setValue={setSearchInput} />
-        <button className="shrink-0">add new user</button>
+        <AddUserButton />
       </div>
       {filteredUsers.length > 0 ? (
         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">

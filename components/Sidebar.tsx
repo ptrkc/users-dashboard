@@ -1,7 +1,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { ClientsIcon, SettingsIcon, SignOutIcon, UserIcon } from './Icons';
-import { NavIconLink } from './NavIconLink';
+import {
+  ClientsIcon,
+  SettingsIcon,
+  SignOutIcon,
+  UserIcon,
+} from '@/components/Icons';
+import { NavIconLink } from '@/components/NavIconLink';
 import logo from 'public/logo.png';
 
 export function Sidebar() {
