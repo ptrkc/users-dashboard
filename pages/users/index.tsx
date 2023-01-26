@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-export default function AddUser() {
+export default function UsersPage() {
   return (
     <>
       <Head>

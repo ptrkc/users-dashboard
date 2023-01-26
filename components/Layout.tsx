@@ -1,5 +1,7 @@
+import { cn } from '@/utils/classnames';
 import { Poppins } from '@next/font/google';
 import { PropsWithChildren } from 'react';
+import { Sidebar } from './Sidebar';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -8,5 +10,10 @@ const poppins = Poppins({
 });
 
 export function Layout({ children }: PropsWithChildren) {
-  return <div className={`${poppins.variable} font-sans`}>{children}</div>;
+  return (
+    <div className={cn(poppins.variable, 'font-sans flex')}>
+      <Sidebar />
+      <div>{children}</div>
+    </div>
+  );
 }
