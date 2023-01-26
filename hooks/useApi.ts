@@ -15,6 +15,10 @@ export interface CreateUser {
   role?: string;
 }
 
+export interface UpdateUser extends CreateUser {
+  id: string; // If you don't send the ID on the PUT body, it becomes null on the server
+}
+
 const apiUrl =
   process.env.API_URL || 'https://test-front-p6cqni7znq-uc.a.run.app';
 
@@ -41,6 +45,9 @@ export function useAPI() {
         body: body ? (JSON.stringify(body) as BodyInit) : null,
         headers: { 'Content-Type': 'application/json' },
       });
+      if (response.status > 400) {
+        return setError(response.status);
+      }
       const data = await response.json();
       setData(data);
     } catch (err) {
@@ -54,7 +61,7 @@ export function useAPI() {
   const getUser = (id: string) => makeRequest({ route: id });
   const createUser = (userData: CreateUser) =>
     makeRequest({ method: 'POST', body: userData });
-  const updateUser = (id: string, updateData: CreateUser) =>
+  const updateUser = (id: string, updateData: UpdateUser) =>
     makeRequest({ route: id, method: 'PUT', body: updateData });
   const deleteUser = (id: string) =>
     makeRequest({ route: id, method: 'DELETE' });

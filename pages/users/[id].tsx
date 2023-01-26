@@ -1,27 +1,72 @@
 import { ArrowLeftIcon } from '@/components/Icons';
 import { PageContainer } from '@/components/PageContainer';
 import { UserForm } from '@/components/UserForm';
-import { CreateUser, useAPI } from '@/hooks/useApi';
+import { CreateUser, useAPI, User } from '@/hooks/useApi';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-export default function AddUserPage() {
+export default function EditUserPage() {
   const router = useRouter();
+  const { id } = router.query;
   const goBack = () => router.back();
+
+  const {
+    data: userData,
+    error,
+    isLoading: isGettingUser = true,
+    getUser,
+  } = useAPI();
+  const {
+    data: updatedData,
+    isLoading: isUpdatingUser = false,
+    updateUser,
+  } = useAPI();
+
   const methods = useForm<CreateUser>();
 
-  const { data, isLoading = false, createUser } = useAPI();
+  useEffect(() => {
+    if (updatedData) window.alert('User updated!');
+  }, [updatedData]);
+
+  useEffect(() => {
+    if (error) {
+      window.alert(`User not found or no valid id (Status ${error}).`);
+      router.push('/users');
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (userData) {
+      Object.entries(userData as User).forEach(([key, value]) => {
+        // ugly but TS was not accepting validKeys.includes(key)
+        if (
+          key === 'role' ||
+          key === 'email' ||
+          key === 'first_name' ||
+          key === 'last_name'
+        )
+          methods.setValue(key, value);
+      });
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    const getDefaultValues = async () => {
+      if (typeof id === 'string') {
+        await getUser(id);
+      }
+    };
+    getDefaultValues();
+  }, [id]);
 
   const onSubmit = async (userData: CreateUser) => {
     if (userData.email === '') delete userData.email;
     if (userData.role === '') delete userData.role;
-    await createUser(userData);
+    if (typeof id === 'string') {
+      await updateUser(id, { ...userData, id });
+    }
   };
-
-  useEffect(() => {
-    if (data) window.alert('User created!');
-  }, [data]);
 
   return (
     <PageContainer
@@ -37,20 +82,24 @@ export default function AddUserPage() {
             >
               <ArrowLeftIcon />
             </button>
-            <h1 className="text-2xl font-bold text-shadow">Add new user</h1>
+            <h1 className="text-2xl font-bold text-shadow">Edit User</h1>
           </div>
           <button
             onClick={methods.handleSubmit(onSubmit)}
-            disabled={isLoading}
+            disabled={isUpdatingUser || isGettingUser}
             className="bg-[#52D8B0] disabled:bg-[#9fe4cf] disabled:cursor-wait text-white hover:shadow-hard hover:-translate-y-1 transition-all px-4 py-3 rounded-xl font-semibold text-sm"
           >
-            save and add
+            save user
           </button>
         </div>
       </div>
       <div className="bg-white rounded-tl-lg p-8 h-full grow shadow-soft">
         <h2 className="text-lg font-bold text-shadow mb-8">User information</h2>
-        <UserForm methods={methods} onSubmit={onSubmit} isLoading={isLoading} />
+        <UserForm
+          methods={methods}
+          onSubmit={onSubmit}
+          isLoading={isUpdatingUser || isGettingUser}
+        />
       </div>
     </PageContainer>
   );
