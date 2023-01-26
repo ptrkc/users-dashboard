@@ -8,7 +8,7 @@ export interface User {
   role: string;
 }
 
-interface CreateUser {
+export interface CreateUser {
   first_name: string;
   last_name: string;
   email?: string;
