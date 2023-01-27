@@ -12,7 +12,7 @@ interface User {
 }
 
 const skeletonClasses =
-  'select-none bg-gray-400 animate-pulse rounded-full inline-block text-transparent text-opacity-0';
+  'select-none bg-gray-300 animate-pulse rounded-full text-transparent text-opacity-0';
 
 function Wrapper({
   user,
@@ -42,20 +42,20 @@ export function UserCard({ user }: { user?: User }) {
         <div className="min-w-0">
           <h2
             className={cn(
-              'text-lg font-semibold whitespace-nowrap text-ellipsis overflow-hidden min-w-0',
+              'text-lg font-semibold whitespace-nowrap text-ellipsis overflow-hidden min-w-0 mb-1',
               !user && skeletonClasses
             )}
           >
             {name}
           </h2>
-          <p
+          <span
             className={cn(
               'text-xs text-[#7F85A2] whitespace-nowrap text-ellipsis overflow-hidden min-w-0',
               !user && skeletonClasses
             )}
           >
             {role}
-          </p>
+          </span>
         </div>
         <div
           className={cn(
