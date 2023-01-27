@@ -40,14 +40,13 @@ export default function UsersPage() {
         <SearchInput value={searchInput} setValue={setSearchInput} />
         <AddUserButton />
       </div>
-      {isLoading && <span>Loading...</span>}
-      {!isLoading && filteredUsers.length > 0 && (
-        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {filteredUsers.map((user) => (
-            <UserCard key={user.id} user={user} />
-          ))}
-        </ul>
-      )}
+      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {isLoading &&
+          Array.from(Array(3).keys()).map((index) => <UserCard key={index} />)}
+        {!isLoading &&
+          filteredUsers.length > 0 &&
+          filteredUsers.map((user) => <UserCard key={user.id} user={user} />)}
+      </ul>
       {!isLoading && filteredUsers.length === 0 && (
         <p>No users found. {debouncedSearch && 'Try resetting your search.'}</p>
       )}
