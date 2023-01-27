@@ -5,17 +5,18 @@ import { SpinnerIcon } from './Icons';
 const colors = {
   green: 'bg-[#52D8B0] disabled:bg-[#9fe4cf] text-white',
   red: ' bg-red-400 disabled:bg-red-300 text-white',
+  white: 'bg-white border disabled:bg-gray-300 text-black',
 };
 
-export function LoadingButton({
+export function Button({
   onClick,
   isLoading,
   color,
   disabled,
   children,
 }: PropsWithChildren<{
-  onClick: MouseEventHandler<HTMLButtonElement>;
-  isLoading: boolean;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  isLoading?: boolean;
   disabled?: boolean;
   color: keyof typeof colors;
 }>) {

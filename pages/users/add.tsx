@@ -1,5 +1,5 @@
 import { ArrowLeftIcon } from '@/components/Icons';
-import { LoadingButton } from '@/components/LoadingButton';
+import { Button } from '@/components/Button';
 import { PageContainer } from '@/components/PageContainer';
 import { UserForm } from '@/components/UserForm';
 import { CreateUser, useAPI, User } from '@/hooks/useApi';
@@ -41,13 +41,13 @@ export default function AddUserPage() {
             </button>
             <h1 className="text-2xl font-bold text-shadow">Add new user</h1>
           </div>
-          <LoadingButton
+          <Button
             onClick={methods.handleSubmit(onSubmit)}
             isLoading={isLoading}
             color="green"
           >
             save and add
-          </LoadingButton>
+          </Button>
         </div>
       </div>
       <div className="bg-white rounded-tl-lg p-8 h-full grow shadow-soft">

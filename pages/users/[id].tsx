@@ -1,11 +1,12 @@
-import { ArrowLeftIcon, SpinnerIcon } from '@/components/Icons';
-import { LoadingButton } from '@/components/LoadingButton';
-import { PageContainer } from '@/components/PageContainer';
-import { UserForm } from '@/components/UserForm';
-import { CreateUser, useAPI, User } from '@/hooks/useApi';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { ArrowLeftIcon, SpinnerIcon } from '@/components/Icons';
+import { Button } from '@/components/Button';
+import { PageContainer } from '@/components/PageContainer';
+import { UserForm } from '@/components/UserForm';
+import { Dialog } from '@/components/Dialog';
+import { CreateUser, useAPI, User } from '@/hooks/useApi';
 
 export default function EditUserPage() {
   const router = useRouter();
@@ -20,25 +21,21 @@ export default function EditUserPage() {
   const methods = useForm<CreateUser>();
 
   useEffect(() => {
-    if (user) {
-      Object.entries(user).forEach(([key, value]) => {
-        // ugly but TS was not accepting validKeys.includes(key)
-        if (
-          key === 'role' ||
-          key === 'email' ||
-          key === 'first_name' ||
-          key === 'last_name'
-        )
-          methods.setValue(key, value);
-      });
-    }
-  }, [user]);
-
-  useEffect(() => {
     const getDefaultValues = async () => {
       if (typeof id === 'string') {
         const { data: userData, error } = await getUser(id);
-        if (error) {
+        if (userData) {
+          Object.entries(userData).forEach(([key, value]) => {
+            // ugly but TS was not accepting validKeys.includes(key)
+            if (
+              key === 'role' ||
+              key === 'email' ||
+              key === 'first_name' ||
+              key === 'last_name'
+            )
+              methods.setValue(key, value);
+          });
+        } else {
           window.alert(`User not found or no valid id (Error ${error}).`);
           return router.push('/users');
         }
@@ -49,10 +46,7 @@ export default function EditUserPage() {
   }, [id]);
 
   const confirmDeleteUser = async () => {
-    const isSure = window.confirm(
-      'Are you sure you want to delete this user?\nThis action cannot be undone.'
-    );
-    if (isSure && user) {
+    if (user) {
       const { error } = await deleteUser(user.id);
       if (!error) {
         window.alert('User deleted!');
@@ -93,22 +87,28 @@ export default function EditUserPage() {
             <h1 className="text-2xl font-bold text-shadow">Edit User</h1>
           </div>
           <div className="flex gap-2">
-            <LoadingButton
+            <Button
               onClick={methods.handleSubmit(onSubmit)}
               disabled={isUpdatingUser || isGettingUser || isDeletingUser}
               isLoading={isUpdatingUser}
               color="green"
             >
               update user
-            </LoadingButton>
-            <LoadingButton
-              onClick={confirmDeleteUser}
-              disabled={isUpdatingUser || isGettingUser || isDeletingUser}
-              isLoading={isDeletingUser}
-              color="red"
+            </Button>
+            <Dialog
+              action={confirmDeleteUser}
+              title="Are you absolutely sure?"
+              description="This action cannot be undone. This will permanently delete this user."
+              actionText="Yes, delete account"
             >
-              delete user
-            </LoadingButton>
+              <Button
+                disabled={isUpdatingUser || isGettingUser || isDeletingUser}
+                isLoading={isDeletingUser}
+                color="red"
+              >
+                delete user
+              </Button>
+            </Dialog>
           </div>
         </div>
       </div>
@@ -124,7 +124,7 @@ export default function EditUserPage() {
         <UserForm
           methods={methods}
           onSubmit={onSubmit}
-          isLoading={isUpdatingUser || isGettingUser}
+          isLoading={isUpdatingUser || isGettingUser || isDeletingUser}
         />
       </div>
     </PageContainer>
