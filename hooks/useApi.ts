@@ -22,10 +22,8 @@ export interface UpdateUser extends CreateUser {
 const apiUrl =
   process.env.API_URL || 'https://test-front-p6cqni7znq-uc.a.run.app';
 
-export function useAPI() {
-  const [data, setData] = useState<User | User[] | undefined>();
+export function useAPI<T>() {
   const [isLoading, setIsLoading] = useState<boolean | undefined>();
-  const [error, setError] = useState<any>(null);
 
   const makeRequest = async ({
     route = '',
@@ -37,8 +35,9 @@ export function useAPI() {
     body?: Record<any, any> | null;
   } = {}) => {
     setIsLoading(true);
-    setError(null);
 
+    let error: any = false;
+    let data: T | undefined = undefined;
     try {
       const response = await fetch(`${apiUrl}/${route}`, {
         method,
@@ -46,14 +45,14 @@ export function useAPI() {
         headers: { 'Content-Type': 'application/json' },
       });
       if (response.status > 400) {
-        return setError(response.status);
+        error = response.status;
       }
-      const data = await response.json();
-      setData(data);
+      data = await response.json();
     } catch (err) {
-      setError(err);
+      error = err;
     } finally {
       setIsLoading(false);
+      return { data, error };
     }
   };
 
@@ -67,9 +66,7 @@ export function useAPI() {
     makeRequest({ route: id, method: 'DELETE' });
 
   return {
-    data,
     isLoading,
-    error,
     getUsers,
     getUser,
     createUser,

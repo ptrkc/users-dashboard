@@ -4,6 +4,7 @@ import { SpinnerIcon } from './Icons';
 
 const colors = {
   green: 'bg-[#52D8B0] disabled:bg-[#9fe4cf] text-white',
+  red: ' bg-red-400 disabled:bg-red-300 text-white',
 };
 
 export function LoadingButton({

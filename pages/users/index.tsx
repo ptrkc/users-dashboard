@@ -7,14 +7,22 @@ import { useDebounceValue } from '@/hooks/useDebounceValue';
 import { User, useAPI } from '@/hooks/useApi';
 
 export default function UsersPage() {
+  const [users, setUser] = useState<User[]>([]);
   const [searchInput, setSearchInput] = useState('');
   const debouncedSearch = useDebounceValue(searchInput).toLowerCase();
 
-  const { data = [], isLoading = true, error, getUsers } = useAPI();
-  const users = data as User[];
+  const { isLoading = true, getUsers } = useAPI<User[]>();
 
   useEffect(() => {
-    getUsers();
+    const getUsersOnce = async () => {
+      const { data, error } = await getUsers();
+      if (data && !error) {
+        setUser(data);
+      } else {
+        window.alert(`Error ${error}`);
+      }
+    };
+    getUsersOnce();
   }, []);
 
   const filteredUsers = useMemo(

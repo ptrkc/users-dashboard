@@ -1,10 +1,9 @@
-import { ArrowLeftIcon, SpinnerIcon } from '@/components/Icons';
+import { ArrowLeftIcon } from '@/components/Icons';
 import { LoadingButton } from '@/components/LoadingButton';
 import { PageContainer } from '@/components/PageContainer';
 import { UserForm } from '@/components/UserForm';
 import { CreateUser, useAPI, User } from '@/hooks/useApi';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 export default function AddUserPage() {
@@ -12,21 +11,19 @@ export default function AddUserPage() {
   const goBack = () => router.back();
   const methods = useForm<CreateUser>();
 
-  const { data, isLoading = false, createUser } = useAPI();
+  const { isLoading = false, createUser } = useAPI<User>();
 
   const onSubmit = async (userData: CreateUser) => {
     if (userData.email === '') delete userData.email;
     if (userData.role === '') delete userData.role;
-    await createUser(userData);
-  };
-
-  useEffect(() => {
-    if (data) {
-      const user = data as User;
+    const { data, error } = await createUser(userData);
+    if (data && !error) {
       window.alert('User created!');
-      router.push(`/users/${user.id}`);
+      router.push(`/users/${data.id}`);
+    } else {
+      window.alert(`Error ${error}`);
     }
-  }, [data]);
+  };
 
   return (
     <PageContainer

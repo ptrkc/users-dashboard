@@ -1,44 +1,27 @@
 import { ArrowLeftIcon, SpinnerIcon } from '@/components/Icons';
+import { LoadingButton } from '@/components/LoadingButton';
 import { PageContainer } from '@/components/PageContainer';
 import { UserForm } from '@/components/UserForm';
 import { CreateUser, useAPI, User } from '@/hooks/useApi';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export default function EditUserPage() {
   const router = useRouter();
   const { id } = router.query;
   const goBack = () => router.back();
+  const [user, setUser] = useState<User>();
 
-  const {
-    data: userData,
-    error,
-    isLoading: isGettingUser = true,
-    getUser,
-  } = useAPI();
-  const {
-    data: updatedData,
-    isLoading: isUpdatingUser = false,
-    updateUser,
-  } = useAPI();
+  const { isLoading: isGettingUser = true, getUser } = useAPI<User>();
+  const { isLoading: isUpdatingUser = false, updateUser } = useAPI<User>();
+  const { isLoading: isDeletingUser = false, deleteUser } = useAPI<true>();
 
   const methods = useForm<CreateUser>();
 
   useEffect(() => {
-    if (updatedData) window.alert('User updated!');
-  }, [updatedData]);
-
-  useEffect(() => {
-    if (error) {
-      window.alert(`User not found or no valid id (Status ${error}).`);
-      router.push('/users');
-    }
-  }, [error]);
-
-  useEffect(() => {
-    if (userData) {
-      Object.entries(userData as User).forEach(([key, value]) => {
+    if (user) {
+      Object.entries(user).forEach(([key, value]) => {
         // ugly but TS was not accepting validKeys.includes(key)
         if (
           key === 'role' ||
@@ -49,22 +32,47 @@ export default function EditUserPage() {
           methods.setValue(key, value);
       });
     }
-  }, [userData]);
+  }, [user]);
 
   useEffect(() => {
     const getDefaultValues = async () => {
       if (typeof id === 'string') {
-        await getUser(id);
+        const { data: userData, error } = await getUser(id);
+        if (error) {
+          window.alert(`User not found or no valid id (Error ${error}).`);
+          return router.push('/users');
+        }
+        setUser(userData);
       }
     };
     getDefaultValues();
   }, [id]);
 
+  const confirmDeleteUser = async () => {
+    const isSure = window.confirm(
+      'Are you sure you want to delete this user?\nThis action cannot be undone.'
+    );
+    if (isSure && user) {
+      const { error } = await deleteUser(user.id);
+      if (!error) {
+        window.alert('User deleted!');
+        router.push('/users');
+      } else {
+        window.alert(`Error ${error}`);
+      }
+    }
+  };
+
   const onSubmit = async (userData: CreateUser) => {
     if (userData.email === '') delete userData.email;
     if (userData.role === '') delete userData.role;
     if (typeof id === 'string') {
-      await updateUser(id, { ...userData, id });
+      const { error } = await updateUser(id, { ...userData, id });
+      if (!error) {
+        window.alert('User updated!');
+      } else {
+        window.alert(`Error ${error}`);
+      }
     }
   };
 
@@ -84,13 +92,24 @@ export default function EditUserPage() {
             </button>
             <h1 className="text-2xl font-bold text-shadow">Edit User</h1>
           </div>
-          <button
-            onClick={methods.handleSubmit(onSubmit)}
-            disabled={isUpdatingUser || isGettingUser}
-            className="bg-[#52D8B0] disabled:bg-[#9fe4cf] disabled:cursor-wait text-white hover:shadow-hard hover:-translate-y-1 transition-all px-4 py-3 rounded-xl font-semibold text-sm"
-          >
-            save user
-          </button>
+          <div className="flex gap-2">
+            <LoadingButton
+              onClick={methods.handleSubmit(onSubmit)}
+              disabled={isUpdatingUser || isGettingUser || isDeletingUser}
+              isLoading={isUpdatingUser}
+              color="green"
+            >
+              update user
+            </LoadingButton>
+            <LoadingButton
+              onClick={confirmDeleteUser}
+              disabled={isUpdatingUser || isGettingUser || isDeletingUser}
+              isLoading={isDeletingUser}
+              color="red"
+            >
+              delete user
+            </LoadingButton>
+          </div>
         </div>
       </div>
       <div className="bg-white rounded-tl-lg p-8 h-full grow shadow-soft">

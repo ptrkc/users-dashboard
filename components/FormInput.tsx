@@ -17,7 +17,7 @@ export const FormInput = forwardRef<HTMLInputElement, InputProps>(
         disabled={disabled}
         className={cn(
           'placeholder:text-[#9FA3B9] w-full bg-white h-12 p-3 rounded-md border-2 border-[rgba(143,146,161,0.2)] focus:shadow-hard transition-all',
-          disabled && 'bg-gray-300 text-gray-300'
+          disabled && 'bg-gray-300 text-gray-500'
         )}
         {...rest}
       />
