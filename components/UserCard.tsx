@@ -12,7 +12,7 @@ interface User {
 }
 
 const skeletonClasses =
-  'select-none bg-gray-400 animate-pulse text-transparent rounded-full inline-block';
+  'select-none bg-gray-400 animate-pulse rounded-full inline-block text-transparent text-opacity-0';
 
 function Wrapper({
   user,

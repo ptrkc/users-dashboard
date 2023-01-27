@@ -1,7 +1,7 @@
+import { UseFormReturn } from 'react-hook-form';
 import { FormInput } from '@/components/FormInput';
 import { FormSelect } from '@/components/FormSelect';
 import { CreateUser } from '@/hooks/useApi';
-import { UseFormReturn } from 'react-hook-form';
 
 export function UserForm({
   methods,

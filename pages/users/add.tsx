@@ -1,7 +1,8 @@
-import { ArrowLeftIcon } from '@/components/Icons';
+import { ArrowLeftIcon, SpinnerIcon } from '@/components/Icons';
+import { LoadingButton } from '@/components/LoadingButton';
 import { PageContainer } from '@/components/PageContainer';
 import { UserForm } from '@/components/UserForm';
-import { CreateUser, useAPI } from '@/hooks/useApi';
+import { CreateUser, useAPI, User } from '@/hooks/useApi';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -20,7 +21,11 @@ export default function AddUserPage() {
   };
 
   useEffect(() => {
-    if (data) window.alert('User created!');
+    if (data) {
+      const user = data as User;
+      window.alert('User created!');
+      router.push(`/users/${user.id}`);
+    }
   }, [data]);
 
   return (
@@ -39,13 +44,13 @@ export default function AddUserPage() {
             </button>
             <h1 className="text-2xl font-bold text-shadow">Add new user</h1>
           </div>
-          <button
+          <LoadingButton
             onClick={methods.handleSubmit(onSubmit)}
-            disabled={isLoading}
-            className="bg-[#52D8B0] disabled:bg-[#9fe4cf] disabled:cursor-wait text-white hover:shadow-hard hover:-translate-y-1 transition-all px-4 py-3 rounded-xl font-semibold text-sm"
+            isLoading={isLoading}
+            color="green"
           >
             save and add
-          </button>
+          </LoadingButton>
         </div>
       </div>
       <div className="bg-white rounded-tl-lg p-8 h-full grow shadow-soft">

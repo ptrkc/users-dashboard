@@ -1,4 +1,4 @@
-import { ArrowLeftIcon } from '@/components/Icons';
+import { ArrowLeftIcon, SpinnerIcon } from '@/components/Icons';
 import { PageContainer } from '@/components/PageContainer';
 import { UserForm } from '@/components/UserForm';
 import { CreateUser, useAPI, User } from '@/hooks/useApi';
@@ -94,7 +94,14 @@ export default function EditUserPage() {
         </div>
       </div>
       <div className="bg-white rounded-tl-lg p-8 h-full grow shadow-soft">
-        <h2 className="text-lg font-bold text-shadow mb-8">User information</h2>
+        <h2 className="text-lg font-bold text-shadow mb-8 flex justify-start items-center gap-2">
+          User information
+          {isGettingUser && (
+            <span className="h-4 w-4">
+              <SpinnerIcon />
+            </span>
+          )}
+        </h2>
         <UserForm
           methods={methods}
           onSubmit={onSubmit}
