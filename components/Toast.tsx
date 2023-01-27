@@ -41,7 +41,7 @@ export function Toast() {
     <button
       onClick={dismiss}
       className={cn(
-        'fixed rounded-xl shadow-hard bg-white py-2 px-4 transition-opacity bottom-4 left-0 right-0 mx-auto',
+        'fixed rounded-xl shadow-hard bg-white py-2 px-4 transition-opacity bottom-4 left-1/2 -translate-x-1/2 mx-auto',
         isOpen ? 'opacity-100' : 'opacity-0',
         toast.type && toastClasses[toast.type]
       )}
