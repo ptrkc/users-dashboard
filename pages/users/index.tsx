@@ -5,10 +5,12 @@ import { SearchInput } from '@/components/SearchInput';
 import { UserCard } from '@/components/UserCard';
 import { useDebounceValue } from '@/hooks/useDebounceValue';
 import { User, useAPI } from '@/hooks/useApi';
+import { useToast } from '@/hooks/useToast';
 
 export default function UsersPage() {
   const [users, setUser] = useState<User[]>([]);
   const [searchInput, setSearchInput] = useState('');
+  const { setToast } = useToast();
   const debouncedSearch = useDebounceValue(searchInput).toLowerCase();
 
   const { isLoading = true, getUsers } = useAPI<User[]>();
@@ -19,7 +21,7 @@ export default function UsersPage() {
       if (data && !error) {
         setUser(data);
       } else {
-        window.alert(`Error ${error}`);
+        setToast({ message: `Error ${error}`, type: 'error' });
       }
     };
     getUsersOnce();

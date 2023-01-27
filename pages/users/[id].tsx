@@ -7,12 +7,14 @@ import { PageContainer } from '@/components/PageContainer';
 import { UserForm } from '@/components/UserForm';
 import { Dialog } from '@/components/Dialog';
 import { CreateUser, useAPI, User } from '@/hooks/useApi';
+import { useToast } from '@/hooks/useToast';
 
 export default function EditUserPage() {
   const router = useRouter();
   const { id } = router.query;
   const goBack = () => router.back();
   const [user, setUser] = useState<User>();
+  const { setToast } = useToast();
 
   const { isLoading: isGettingUser = true, getUser } = useAPI<User>();
   const { isLoading: isUpdatingUser = false, updateUser } = useAPI<User>();
@@ -24,7 +26,7 @@ export default function EditUserPage() {
     const getDefaultValues = async () => {
       if (typeof id === 'string') {
         const { data: userData, error } = await getUser(id);
-        if (userData) {
+        if (userData && !error) {
           Object.entries(userData).forEach(([key, value]) => {
             // ugly but TS was not accepting validKeys.includes(key)
             if (
@@ -36,7 +38,14 @@ export default function EditUserPage() {
               methods.setValue(key, value);
           });
         } else {
-          window.alert(`User not found or no valid id (Error ${error}).`);
+          const message =
+            error === 422
+              ? 'User id is not a valid uuid (422)'
+              : 'User not found (404)';
+          setToast({
+            message,
+            type: 'error',
+          });
           return router.push('/users');
         }
         setUser(userData);
@@ -49,10 +58,12 @@ export default function EditUserPage() {
     if (user) {
       const { error } = await deleteUser(user.id);
       if (!error) {
-        window.alert('User deleted!');
+        setToast({ message: 'User deleted!', type: 'ok' });
         router.push('/users');
       } else {
-        window.alert(`Error ${error}`);
+        const message =
+          error === 404 ? 'User not found (404)' : `Error ${error}`;
+        setToast({ message, type: 'error' });
       }
     }
   };
@@ -63,9 +74,11 @@ export default function EditUserPage() {
     if (typeof id === 'string') {
       const { error } = await updateUser(id, { ...userData, id });
       if (!error) {
-        window.alert('User updated!');
+        setToast({ message: 'User updated!', type: 'ok' });
       } else {
-        window.alert(`Error ${error}`);
+        const message =
+          error === 404 ? 'User not found (404)' : `Error ${error}`;
+        setToast({ message, type: 'error' });
       }
     }
   };

@@ -5,11 +5,13 @@ import { UserForm } from '@/components/UserForm';
 import { CreateUser, useAPI, User } from '@/hooks/useApi';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+import { useToast } from '@/hooks/useToast';
 
 export default function AddUserPage() {
   const router = useRouter();
   const goBack = () => router.back();
   const methods = useForm<CreateUser>();
+  const { setToast } = useToast();
 
   const { isLoading = false, createUser } = useAPI<User>();
 
@@ -18,10 +20,10 @@ export default function AddUserPage() {
     if (userData.role === '') delete userData.role;
     const { data, error } = await createUser(userData);
     if (data && !error) {
-      window.alert('User created!');
+      setToast({ type: 'ok', message: 'User created!' });
       router.push(`/users/${data.id}`);
     } else {
-      window.alert(`Error ${error}`);
+      setToast({ type: 'error', message: `Error ${error}` });
     }
   };
 
